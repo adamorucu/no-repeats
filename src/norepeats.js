@@ -1,32 +1,4 @@
-// function isOnMainPage() {
-//   const url = window.location.href;
-//   // Adjust the pattern to match the main page URL
-//   const mainPagePattern = /^https:\/\/www\.youtube\.com\/$/;
-//   return mainPagePattern.test(url);
-// }
 
-// function getIsEnabled(callback) {
-//   chrome.runtime.sendMessage({action: 'getIsEnabled'}, callback);
-// }
-
-// function hideWatchedVideos() {
-//   if (!isOnMainPage()) {
-//     return;
-//   }
-//   getIsEnabled((response) => {
-//     if (!isOnMainPage() || !response.isEnabled) {
-//       return;
-//     }
-
-//   const videoThumbnails = document.querySelectorAll('#dismissible');
-
-//   videoThumbnails.forEach((thumbnail) => {
-//     const progress = thumbnail.querySelector('#progress');
-//     if (progress) {
-//       thumbnail.style.display = 'none';
-//     }
-//   });
-// }
 function isOnMainPage() {
   const url = window.location.href;
   const mainPagePattern = /^https:\/\/www\.youtube\.com\/$/;
@@ -34,19 +6,21 @@ function isOnMainPage() {
 }
 
 function hideWatchedVideos(isEnabled) {
-  if (!isOnMainPage() || !isEnabled) {
+  if (isOnMainPage()) {
+
+    const videoThumbnails = document.querySelectorAll('#dismissible');
+
+    videoThumbnails.forEach((thumbnail) => {
+      const progress = thumbnail.querySelector('#progress');
+      if (progress && parseInt(progress.style.width) > 70) {
+        thumbnail.style.display = 'none';
+      }
+    });
+  } else {
     return;
   }
-
-  const videoThumbnails = document.querySelectorAll('#dismissible');
-
-  videoThumbnails.forEach((thumbnail) => {
-    const progress = thumbnail.querySelector('#progress');
-    if (progress) {
-      thumbnail.style.display = 'none';
-    }
-  });
 }
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'toggleEnabled') {
