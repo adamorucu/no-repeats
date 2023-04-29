@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "No Repeats",
+  "version": "1.0",
+  "description": "Hides videos that have been already watched from the main page.",
+  "icons": {
+    "48": "icon48.png"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": ["norepeats.js"]
+    }
+  ]
+}
